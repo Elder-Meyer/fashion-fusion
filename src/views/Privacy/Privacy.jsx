@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
-import Markdown from './modules/components/Markdown';
-import Typography from './modules/components/Typography';
-import withRoot from './modules/withRoot';
-import privacy from './modules/views/privacy.md';
+import Markdown from '../../components/items/Markdown';
+import Typography from '../../components/items/Typography';
+import withRoot from '../../styles/withRoot';
+import privacy from './privacy.md';
 
 function Privacy() {
   return (

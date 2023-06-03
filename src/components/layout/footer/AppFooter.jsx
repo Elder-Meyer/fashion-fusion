@@ -4,10 +4,10 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import { Link as LinkRoute } from 'react-router-dom';
 import Container from '@mui/material/Container';
-import Typography from '../components/Typography';
-import TextField from '../components/TextField';
-import appFooterFacebook from '../../assets/appFooterFacebook.png';
-import appFooterTwitter from '../../assets/appFooterTwitter.png';
+import Typography from '../../items/Typography';
+import TextField from '../../items/TextField';
+import appFooterFacebook from '../../../assets/png/appFooterFacebook.png';
+import appFooterTwitter from '../../../assets/png/appFooterTwitter.png';
 
 function Copyright() {
   return (
