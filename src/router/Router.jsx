@@ -1,15 +1,15 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import AppFooter from '../modules/views/AppFooter';
-import AppAppBar from '../modules/views/AppAppBar';
-import Home from "../Home";
-import SignIn from "../SignIn";
-import SignUp from "../SignUp";
-import Terms from "../Terms";
-import Privacy from "../Privacy";
-import ForgotPassword from "../ForgotPassword";
-import ScrollToTop from "../modules/components/ScrollToTop";
+import AppFooter from '../components/layout/footer/AppFooter';
+import AppAppBar from '../components/layout/navbar/AppAppBar';
+import Home from "../views/Home/Home";
+import SignIn from "../views/SignIn/SignIn";
+import SignUp from "../views/SignUp/SignUp";
+import Terms from "../views/Terms/Terms";
+import Privacy from "../views/Privacy/Privacy";
+import ForgotPassword from "../views/ForgotPassword/ForgotPassword";
+import ScrollToTop from "../components/items/ScrollToTop";
 import { Fab, Toolbar } from "@mui/material";
-import { BtnScrollTop } from "../modules/components/btnScrollTop";
+import { BtnScrollTop } from "../components/items/btnScrollTop";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 function Router(props){

@@ -2,11 +2,11 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import Typography from '../components/Typography';
-import TextField from '../components/TextField';
-import Snackbar from '../components/Snackbar';
-import Button from '../components/Button';
-import productCTAImageDots from '../../assets/productCTAImageDots.png'
+import Typography from '../../components/items/Typography';
+import TextField from '../../components/items/TextField';
+import Snackbar from '../../components/items/Snackbar';
+import Button from '../../components/items/Button';
+import productCTAImageDots from '../../assets/png/productCTAImageDots.png'
 
 function ProductCTA() {
   const [open, setOpen] = React.useState(false);

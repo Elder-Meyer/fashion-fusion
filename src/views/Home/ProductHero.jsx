@@ -1,6 +1,6 @@
 import * as React from 'react';
-import Button from '../components/Button';
-import Typography from '../components/Typography';
+import Button from '../../components/items/Button';
+import Typography from '../../components/items/Typography';
 import ProductHeroLayout from './ProductHeroLayout';
 import { Link } from 'react-router-dom';
 

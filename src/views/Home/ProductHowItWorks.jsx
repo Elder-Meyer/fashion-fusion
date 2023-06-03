@@ -3,13 +3,13 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import Button from '../components/Button';
-import Typography from '../components/Typography';
+import Button from '../../components/items/Button';
+import Typography from '../../components/items/Typography';
 import { Link } from 'react-router-dom';
-import productHowItWorks1 from '../../assets/productHowItWorks1.svg'
-import productHowItWorks2 from '../../assets/productHowItWorks2.svg'
-import productHowItWorks3 from '../../assets/productHowItWorks3.svg'
-import productCurvyLines from '../../assets/productCurvyLines.png'
+import productHowItWorks1 from '../../assets/svg/productHowItWorks1.svg'
+import productHowItWorks2 from '../../assets/svg/productHowItWorks2.svg'
+import productHowItWorks3 from '../../assets/svg/productHowItWorks3.svg'
+import productCurvyLines from '../../assets/png/productCurvyLines.png'
 
 const item = {
   display: 'flex',

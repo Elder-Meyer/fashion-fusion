@@ -1,5 +1,5 @@
 import * as React from 'react';
-import withRoot from './modules/withRoot';
+import withRoot from './styles/withRoot';
 import Router from './router/router';
 
 function App() {

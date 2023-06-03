@@ -3,11 +3,11 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import Typography from '../components/Typography';
-import productValues1 from '../../assets/productValues1.svg'
-import productValues2 from '../../assets/productValues2.svg'
-import productValues3 from '../../assets/productValues3.svg'
-import productCurvyLines from '../../assets/productCurvyLines.png'
+import Typography from '../../components/items/Typography';
+import productValues1 from '../../assets/svg/productValues1.svg'
+import productValues2 from '../../assets/svg/productValues2.svg'
+import productValues3 from '../../assets/svg/productValues3.svg'
+import productCurvyLines from '../../assets/png/productCurvyLines.png'
 
 const item = {
   display: 'flex',
