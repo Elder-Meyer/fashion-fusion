@@ -2,10 +2,16 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AppFooter from '../components/layout/footer/AppFooter';
 import AppAppBar from '../components/layout/navbar/AppAppBar';
 import Home from "../views/Home/Home";
+import Tienda  from '../views/Shop/Tienda'
 import SignIn from "../views/SignIn/SignIn";
 import SignUp from "../views/SignUp/SignUp";
 import Terms from "../views/Terms/Terms";
 import Privacy from "../views/Privacy/Privacy";
+import Man from "../views/Shop/Man"
+import Women from "../views/Shop/Women"
+import Child from "../views/Shop/Child"
+import LittleGirl from "../views/Shop/LittleGirl"
+
 import ForgotPassword from "../views/ForgotPassword/ForgotPassword";
 import ScrollToTop from "../components/items/ScrollToTop";
 import { Fab, Toolbar } from "@mui/material";
@@ -27,8 +33,20 @@ function Router(props){
                     <Route path='/terms'            element={<Terms/>} />
                     <Route path='/privacy'          element={<Privacy/>} />
                     <Route path='/forgot-password'  element={<ForgotPassword/>} />
-                    <Route path='*'                 element={"error"} />
+
+                    {/* SubRutas -- tienda */}
+                    <Route path="/tienda/" >
+                        <Route index                    element={<Tienda/>} />
+                        <Route path="hombre"            element={<Man/>} />
+                        <Route path="mujer"             element={<Women/>} />
+                        <Route path="niño"              element={<Child/>} />
+                        <Route path="niña"              element={<LittleGirl/>} />
+                        <Route path="*"                 element={"error"} />
+                    </Route>
+
+                    <Route path='*'  element={"error"} />
                 </Routes>
+
 
                 <BtnScrollTop {...props}>
                     <Fab size="small" aria-label="scroll back to top">
