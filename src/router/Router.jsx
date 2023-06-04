@@ -1,4 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { Box }                  from '@mui/material'
+
 import AppFooter from '../components/layout/footer/AppFooter';
 import AppAppBar from '../components/layout/navbar/AppAppBar';
 import Home from "../views/Home/Home";
@@ -11,6 +13,7 @@ import Man from "../views/Shop/Man"
 import Women from "../views/Shop/Women"
 import Child from "../views/Shop/Child"
 import LittleGirl from "../views/Shop/LittleGirl"
+import DetalleProduct from "../views/Shop/DetalleProduct"
 
 import ForgotPassword from "../views/ForgotPassword/ForgotPassword";
 import ScrollToTop from "../components/items/ScrollToTop";
@@ -18,11 +21,25 @@ import { Fab, Toolbar } from "@mui/material";
 import { BtnScrollTop } from "../components/items/btnScrollTop";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
+import { getProducts } from '../utils/fnTienda'
+import { useEffect, useState } from 'react'
+
 function Router(props){
+    const [productos, setProductos] = useState(null);
+
+    const getProductsData = async() =>{
+        const p = await getProducts();
+        setProductos(p.docs);
+        // console.log(p.docs)
+    }
+
+    useEffect(() => {
+        getProductsData();
+    }, [])
+
     return(
         <BrowserRouter>
-            <AppAppBar />
-            
+            <AppAppBar />   
 
             <ScrollToTop>
                 <Routes>
@@ -44,6 +61,8 @@ function Router(props){
                         <Route path="*"                 element={"error"} />
                     </Route>
 
+                    <Route path='tienda/:id'    element={<DetalleProduct productos={productos}/> } />
+
                     <Route path='*'  element={"error"} />
                 </Routes>
 
@@ -54,10 +73,7 @@ function Router(props){
                     </Fab>
                 </BtnScrollTop>
             </ScrollToTop>
-
-
-
-
+            
             <AppFooter />
         </BrowserRouter>
     )

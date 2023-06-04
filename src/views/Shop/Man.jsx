@@ -1,19 +1,98 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Grid, Toolbar, TextField, MenuItem, Button } from '@mui/material'
+import { Box, Grid, Toolbar, TextField, MenuItem, Button } from '@mui/material';
 import  {WrapperSingleRoute}  from '../../components/customs/WrapperSingleRoute';
-import {Bread} from '../../components/customs/Bread'
+import {Bread} from '../../components/customs/Bread';
 import HomeIcon from '@mui/icons-material/Home';
 import StoreIcon from '@mui/icons-material/Store';
 import ManIcon from '@mui/icons-material/Man';
 import { ItemListCard } from '../../components/customs/ItemListCard';
 import { styled, alpha } from '@mui/material/styles';
-import { Form } from "semantic-ui-react"
+import { Form } from "semantic-ui-react";
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import GroupSkeleton from './GroupSkeleton';
+import { app } from '../../config/firebaseConnection';
+import { tallas, colores, marcas, tipos } from "./optionListMan"
+
 
 const Man = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [proyectos, setProyectos] = useState([]);
+  const [busqueda, setBusqueda] = useState("");
+  const [tablaProyectos, setTablaProyectos] = useState([]);
+  const [docs, setDocs] = useState([]);
+
+  const [color, setColor] = useState("");
+  const [talla, setTalla] = useState("");
+  const [marca, setMarca] = useState("");
+  const [tipo, setTipo] = useState("");
+
+
+  const obtenerInfo = async () => {
+    const docList = await app.firestore().collection("producto").get();
+    const listHombre = docList.docs.filter((doc) => doc.data().categoria === 'hombre');
+    setProyectos(listHombre);
+    setDocs(listHombre);
+    setTablaProyectos(listHombre);
+  }
+
+  const handleChange = e => {
+    setBusqueda(e.target.value);
+    filtrar(e.target.value.toString().toUpperCase());
+    console.log(e.target.value);
+  }
+
+  const filtrar = (terminoBusqueda) => {
+    // eslint-disable-next-line
+   var resultadoBusqueda = tablaProyectos.filter((elemento) => {
+     if (elemento.data().nombre.includes(terminoBusqueda)) {
+       return elemento;
+     }
+   });
+   setProyectos(resultadoBusqueda);
+   setDocs(resultadoBusqueda);
+  }
+
+  const handleSearch = async () => {
+    try {
+      const collectionRef = app.firestore().collection("producto");
+      let query = collectionRef.where('categoria', '==', 'hombre');
+  
+      if (color !== "Todos" && color !== "") {
+        query = query.where('color', '==', color);
+      }
+  
+      if (talla !== "Todos" && talla !== "") {
+        query = query.where('talla', '==', talla);
+      }
+  
+      if (tipo !== "Todos" && tipo !== "") {
+        query = query.where('nombre', '==', tipo);
+      }
+  
+      if (marca !== "Todos" && marca !== "") {
+        query = query.where('marca', '==', marca);
+      }
+  
+      const snapshot = await query.get();
+      setProyectos(snapshot.docs.map((doc) => doc));
+  
+    } catch (error) {
+      console.error(error);
+    }
+  };
+   
+  
+  useEffect(() => {   
+    obtenerInfo()
+    // Simulamos una carga de datos de 2 segundos
+    const timeoutId = setTimeout(() => {
+      // Una vez que se han cargado los datos, actualizamos el estado
+      setIsLoading(false);
+    }, 1000);
+    // Limpiamos el timeout si el componente se desmonta antes de que termine la carga
+    return () => clearTimeout(timeoutId);
+  }, [])
 
   return (
     <WrapperSingleRoute>
@@ -41,8 +120,8 @@ const Man = () => {
               <StyledInputBase
                 placeholder="Buscar…"
                 inputProps={{ 'aria-label': 'search' }}
-                // value={busqueda}
-                // onChange={handleChange}
+                value={busqueda}
+                onChange={handleChange}
                 />
             </Search>
           </Toolbar>
@@ -57,15 +136,15 @@ const Man = () => {
             label="Color"
             type="text"
             name="color"
-            // onChange={(e) => setColor(e.target.value)}
-            // value={color || ""}
+            onChange={(e) => setColor(e.target.value)}
+            value={color || ""}
             autoComplete="off"
             >
-            {/* {colores.map((color) => (
+            {colores.map((color) => (
               <MenuItem key={color.value} value={color.value}>
                 {color.label}
               </MenuItem>
-            ))} */}
+            ))} 
           </TextField>
         </Grid>
 
@@ -77,32 +156,91 @@ const Man = () => {
             label="Talla"
             type="text"
             name="talla"
-            // onChange={(e) => setColor(e.target.value)}
-            // value={color || ""}
+            onChange={(e) => setTalla(e.target.value)}
+            value={talla || ""}
             autoComplete="off"
             >
-            {/* {colores.map((color) => (
-              <MenuItem key={color.value} value={color.value}>
-                {color.label}
+            {tallas.map((talla) => (
+              <MenuItem key={talla.value} value={talla.value}>
+                {talla.label}
               </MenuItem>
-            ))} */}
+            ))}
           </TextField>
         </Grid>
 
         <Grid item  md={4} sm={12} xs={12}>
           <Box display="flex" height="100%">
-            <Button fullWidth  variant="contained" > {/* onClick={handleSearch} */}
+            <Button fullWidth  variant="contained"  onClick={handleSearch}> 
               Buscar
             </Button>
           </Box>
         </Grid>
+
+        <Grid item  md={4} sm={6} xs={6}>
+          <TextField
+            component={Form.Input}
+            fullWidth
+            select
+            label="Marca"
+            type="text"
+            name="marca"
+            onChange={(e) => setMarca(e.target.value)}
+            value={marca || ""}
+            autoComplete="off"
+            >
+            {marcas.map((marca) => (
+              <MenuItem key={marca.value} value={marca.value}>
+                {marca.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+
+        <Grid item  md={4} sm={6} xs={6}>
+          <TextField
+            component={Form.Input}
+            fullWidth
+            select
+            label="Tipo"
+            type="text"
+            name="tipo"
+            onChange={(e) => setTipo(e.target.value)}
+            value={tipo || ""}
+            autoComplete="off"
+            >
+            {tipos.map((tipo) => (
+              <MenuItem key={tipo.value} value={tipo.value}>
+                {tipo.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+        
       </Grid>
 
 
 
       <Box sx={{ m: 3, flexGrow: 1 }}>{/*O R A N G E*/}
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-
+          {
+            isLoading ? (
+              <GroupSkeleton />
+            )
+              :
+              (proyectos.map(proyecto => {
+                return (
+                  <Grid item xs={12} sm={6} md={4} key={proyecto.id}>
+                    <ItemListCard
+                      key={proyecto.id}
+                      id={proyecto.id}
+                      titulo={`${proyecto.data().nombre} $MXN ${proyecto.data().costo}`}
+                      descripcion={proyecto.data().descripcion}
+                      ancla={`../${proyecto.id}`}
+                      img={proyecto.data().url} />
+                  </Grid>
+                )
+              }))
+          }
         </Grid>      
       </Box> 
     

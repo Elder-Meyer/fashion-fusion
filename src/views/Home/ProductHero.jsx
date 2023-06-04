@@ -3,20 +3,18 @@ import Button from '../../components/items/Button';
 import Typography from '../../components/items/Typography';
 import ProductHeroLayout from './ProductHeroLayout';
 import { Link } from 'react-router-dom';
-
-const backgroundImage =
-  'https://images.unsplash.com/photo-1534854638093-bada1813ca19?auto=format&fit=crop&w=1400';
+import backgroundImage from './fondo.jpg'; // Ruta local de la imagen
 
 export default function ProductHero() {
   return (
     <ProductHeroLayout
       sxBackground={{
         backgroundImage: `url(${backgroundImage})`,
-        backgroundColor: '#7fc7d9', // Average color of the background image.
+        backgroundColor: '#7fc7d9', // Color promedio de la imagen de fondo.
         backgroundPosition: 'center',
       }}
     >
-      {/* Increase the network loading priority of the background image. */}
+      {/* Aumentar la prioridad de carga de la imagen de fondo. */}
       <img
         style={{ display: 'none' }}
         src={backgroundImage}
