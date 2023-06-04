@@ -23,6 +23,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import { getProducts } from '../utils/fnTienda'
 import { useEffect, useState } from 'react'
+import Admin from "../views/users/admin/Admin";
 
 function Router(props){
     const [productos, setProductos] = useState(null);
@@ -50,6 +51,7 @@ function Router(props){
                     <Route path='/terms'            element={<Terms/>} />
                     <Route path='/privacy'          element={<Privacy/>} />
                     <Route path='/forgot-password'  element={<ForgotPassword/>} />
+                    <Route path="/user/admin"       element={<Admin/>} />
 
                     {/* SubRutas -- tienda */}
                     <Route path="/tienda/" >
