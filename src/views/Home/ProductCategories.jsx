@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Container from '@mui/material/Container';
 import Typography from '../../components/items/Typography';
+import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 const ImageBackdrop = styled('div')(({ theme }) => ({
   position: 'absolute',
@@ -87,8 +89,11 @@ export default function ProductCategories() {
   
   return (
     <Container component="section" sx={{ mt: 8, mb: 4 }}>
-      <Typography variant="h4" marked="center" align="center" component="h2">
-        Secciones
+      <Typography variant="h4" marked="center" align="center" >
+        <Button variant='text' sx={{fontSize:  40, color: "text.primary" }} component={Link} to="/tienda">
+          Secciones
+        </Button>
+
       </Typography>
       <Box sx={{ mt: 8, display: 'flex', flexWrap: 'wrap' }}>
         {images.map((image) => (
@@ -97,7 +102,8 @@ export default function ProductCategories() {
             style={{
               width: image.width,
             }}
-            onClick={() => redirectToRoute(image.path)}
+            component={Link}
+            to={`${image.path}`}
           >
             <Box
               sx={{

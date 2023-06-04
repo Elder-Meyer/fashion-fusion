@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Container from '@mui/material/Container';
 import Typography from '../../components/items/Typography';
+import { Link } from 'react-router-dom';
 
 const ImageBackdrop = styled('div')(({ theme }) => ({
   position: 'absolute',
@@ -97,7 +98,8 @@ export default function ProductCategories() {
             style={{
               width: image.width,
             }}
-            onClick={() => redirectToRoute(image.path)}
+            component={Link}
+            to={`${image.path}`}
           >
             <Box
               sx={{
