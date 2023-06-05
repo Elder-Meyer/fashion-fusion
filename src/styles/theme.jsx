@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 import { green, grey, red } from '@mui/material/colors';
 
-const rawTheme = createTheme({
+export const rawTheme = createTheme({
   palette: {
     primary: {
       light: '#e5e6ef',
