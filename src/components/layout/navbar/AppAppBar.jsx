@@ -19,7 +19,7 @@ import { Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemText, 
 import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
-const navItems = [{texto: 'Inicio', path: '/inicio'}, {texto: 'Nosotros', path: '/about'}, {texto: 'Tienda', path: '/tienda'} ];
+const navItems = [{texto: 'Inicio', path: '/inicio'}, {texto: 'Nosotros', path: '/about-us'}, {texto: 'Tienda', path: '/tienda'} ];
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
