@@ -10,13 +10,17 @@ import RFTextField from '../../components/form/RFTextField';
 import FormButton from '../../components/form/FormButton';
 import FormFeedback from '../../components/form/FormFeedback';
 import withRoot from '../../styles/withRoot';
+import { TextField} from '@mui/material'
+import { app } from "../../config/firebaseConnection";
+import { useNavigate } from 'react-router-dom';
 
 function SignIn() {
   const [sent, setSent] = React.useState(false);
-
+  const [password, setPassword] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const navigate = useNavigate();
   const validate = (values) => {
     const errors = required(['email', 'password'], values);
-
     if (!errors.email) {
       const emailError = email(values.email);
       if (emailError) {
@@ -26,11 +30,31 @@ function SignIn() {
 
     return errors;
   };
-
-  const handleSubmit = () => {
-    setSent(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+    if (!password) return;
+    const coleccionRef = app.firestore().collection("usuarios");
+    // Realizar la consulta para verificar si el correo ya existe
+    const querySnapshot = await coleccionRef.where("email", "==", email).get();
+    if (!querySnapshot.empty) {
+      // El correo ya existe, validar la contraseña
+      const userDoc = querySnapshot.docs[0];
+      const userData = userDoc.data();
+      const storedPassword = userData.password;
+  
+      if (password !== storedPassword) {
+        // Contraseña incorrecta
+        alert("Contraseña incorrecta");
+        return;
+      }
+      navigate("/inicio");
+    } else {
+      // El correo no existe
+      alert("Correo no registrado, por favor regístrate");
+      return;
+    }
   };
-
   return (
     <React.Fragment>
       <AppForm>
@@ -57,30 +81,55 @@ function SignIn() {
         >
           {({ handleSubmit: handleSubmit2, submitting }) => (
             <Box component="form" onSubmit={handleSubmit2} noValidate sx={{ mt: 6 }}>
-              <Field
-                autoComplete="email"
-                autoFocus
-                component={RFTextField}
-                disabled={submitting || sent}
+              <TextField
                 fullWidth
-                label="Email"
-                margin="normal"
+                label="Correo electrónico"
                 name="email"
+                type="email"
+                value={email || ""}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setEmail(value);
+                }}
                 required
-                size="large"
+                error={
+                  email.length === 0 ||
+                  !/\S+@\S+\.\S+/.test(email)
+                }
+                helperText={
+                  email.length === 0
+                    ? "El correo electrónico no puede estar vacío"
+                    : !/\S+@\S+\.\S+/.test(email)
+                    ? "Ingrese un correo electrónico válido"
+                    : ""
+                }
               />
-              <Field
+              <br /><br />
+
+              <TextField
                 fullWidth
-                size="large"
-                component={RFTextField}
-                disabled={submitting || sent}
-                required
+                label="Contraseña"
                 name="password"
-                autoComplete="current-password"
-                label="Password"
                 type="password"
-                margin="normal"
+                value={password || ""}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setPassword(value);
+                }}
+                required
+                error={
+                  (password.length > 0 && !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}/.test(password)) || password.length === 0
+                }
+                helperText={
+                  password.length === 0
+                    ? <span style={{ color: 'red' }}>La contraseña no puede estar vacía</span>
+                    : password.length > 0 && !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}/.test(password)
+                    ? "La contraseña debe tener al menos 5 caracteres, incluyendo al menos 1 letra minúscula, 1 letra mayúscula, 1 número y 1 carácter especial."
+                    : ""
+                }
               />
+
+
               <FormSpy subscription={{ submitError: true }}>
                 {({ submitError }) =>
                   submitError ? (
@@ -92,12 +141,12 @@ function SignIn() {
               </FormSpy>
               <FormButton
                 sx={{ mt: 3, mb: 2 }}
-                disabled={submitting || sent}
-                size="large"
                 color="secondary"
                 fullWidth
+                type="submit"
+                onClick={handleSubmit}
               >
-                {submitting || sent ? 'In progress…' : 'Sign In'}
+                Iniciar sesion
               </FormButton>
             </Box>
           )}
