@@ -10,6 +10,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 export default function ButtonAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
+      <Typography variant="subtitle1">
+        Componente de navegación
+      </Typography>
       <AppBar position="static">
         <Toolbar>
           <IconButton

@@ -13,6 +13,7 @@ import withRoot from '../../styles/withRoot';
 import { TextField} from '@mui/material'
 import { app } from "../../config/firebaseConnection";
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 function SignIn() {
   const [sent, setSent] = React.useState(false);
@@ -45,13 +46,25 @@ function SignIn() {
   
       if (password !== storedPassword) {
         // Contraseña incorrecta
-        alert("Contraseña incorrecta");
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'Contraseña incorrecta',
+          showConfirmButton: false,
+          timer: 1500
+        })
         return;
       }
       navigate("/inicio");
     } else {
       // El correo no existe
-      alert("Correo no registrado, por favor regístrate");
+      Swal.fire({
+        position: 'center',
+        icon: 'info',
+        title: 'Correo no registrado, por favor regístrate',
+        showConfirmButton: false,
+        timer: 3500
+      })
       return;
     }
   };

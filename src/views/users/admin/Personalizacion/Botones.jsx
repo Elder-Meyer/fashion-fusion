@@ -4,8 +4,10 @@ import React from 'react'
 export const Botones = () => {
   return (
     <>
-      <Stack direction="column" spacing={1} m={2}>
-        <Typography>Contained buttons</Typography>
+      <Stack direction="column" spacing={1} mt={2}>
+        <Typography variant='subtitle1'>
+          Botones por defecto
+        </Typography>
         <Stack direction="row" spacing={2}>
           <Button>
             Default
@@ -24,8 +26,6 @@ export const Botones = () => {
           </Button>
         </Stack>
 
-        
-        <Typography>Text buttons</Typography>
         <Stack direction="row" spacing={2}>
           <Button>
             Default
@@ -44,8 +44,6 @@ export const Botones = () => {
           </Button>
         </Stack>
 
-
-        <Typography>Outlined buttons</Typography>
         <Stack direction="row" spacing={2}>
           <Button>
             Default

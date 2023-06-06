@@ -14,6 +14,7 @@ import withRoot from '../../styles/withRoot';
 import { TextField} from '@mui/material'
 import { app } from "../../config/firebaseConnection";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 function SignUp() {
   const [sent, setSent] = React.useState(false);
   const [firstName, setFirstName] = React.useState("");
@@ -48,7 +49,14 @@ function SignUp() {
     if (!querySnapshot.empty) {
       // El correo ya existe, puedes manejar el caso aquí
       console.log("El correo ya está registrado");
-      alert("Correo existente, prueba con otro ");
+      Swal.fire({
+        position: 'center',
+        icon: 'info',
+        title: 'Correo existente, preba con otro',
+        showConfirmButton: false,
+        timer: 3500
+      })
+      
       return;
     }
     // El correo no existe, agregarlo a la colección de usuarios

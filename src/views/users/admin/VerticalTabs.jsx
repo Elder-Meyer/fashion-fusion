@@ -24,7 +24,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 3, minWidth: "78vw" }}>
           {children}
         </Box>
       )}
@@ -64,12 +64,12 @@ export default function VerticalTabs() {
         aria-label="Vertical tabs example"
         sx={{ borderRight: 1, borderColor: 'divider', minWidth: "20vw" }}
       >
-        <Tab label="Personalización"      {...a11yProps(0)} icon={<ColorLensOutlined/>} iconPosition='start' />
-        <Tab label="Usuarios"             {...a11yProps(1)} icon={<GroupOutlined/>} iconPosition='start' />
-        <Tab label="Contenido"            {...a11yProps(2)} icon={<FolderCopyOutlined/>} iconPosition='start' />
-        <Tab label="Tipografía"           {...a11yProps(3)} icon={<TextFieldsOutlined/>} iconPosition='start' />
-        <Tab label="Estadisticas"         {...a11yProps(4)} icon={<QueryStatsOutlined/>} iconPosition='start' />
-        <Tab label="Copias de seguridad"  {...a11yProps(5)} icon={<StorageOutlined/>} iconPosition='start' />
+        <Tab label="Personalización"      {...a11yProps(0)} icon={<ColorLensOutlined/>}   iconPosition='start' />
+        <Tab label="Usuarios"             {...a11yProps(1)} icon={<GroupOutlined/>}       iconPosition='start' />
+        <Tab label="Contenido"            {...a11yProps(2)} icon={<FolderCopyOutlined/>}  iconPosition='start' />
+        <Tab label="Tipografía"           {...a11yProps(3)} icon={<TextFieldsOutlined/>}  iconPosition='start' />
+        <Tab label="Estadisticas"         {...a11yProps(4)} icon={<QueryStatsOutlined/>}  iconPosition='start' />
+        <Tab label="Copias de seguridad"  {...a11yProps(5)} icon={<StorageOutlined/>}     iconPosition='start' />
       </Tabs>
       <TabPanel value={value} index={0}>
         <Personalizacion/>

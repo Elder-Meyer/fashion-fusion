@@ -22,7 +22,8 @@
     "react-final-form": "^6.5.9",
     "react-markdown": "^8.0.7",
     "react-router-dom": "^6.11.2",
-    "semantic-ui-react": "^2.1.4"
+    "semantic-ui-react": "^2.1.4",
+    "sweetalert2": "^11.7.10"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",
