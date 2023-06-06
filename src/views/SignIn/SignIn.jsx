@@ -6,7 +6,7 @@ import { Link as LinkRoute } from 'react-router-dom';
 import Typography from '../../components/items/Typography';
 import AppForm from '../Home/AppForm';
 import { email, required } from '../../components/form/validation';
-import RFTextField from '../../components/form/RFTextField';
+// import RFTextField from '../../components/form/RFTextField';
 import FormButton from '../../components/form/FormButton';
 import FormFeedback from '../../components/form/FormFeedback';
 import withRoot from '../../styles/withRoot';
