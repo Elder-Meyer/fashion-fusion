@@ -145,8 +145,8 @@ export default function AppAppBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose} component={Link} to="/user/admin">Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose} component={Link} to="/user/admin">My account</MenuItem>
     </Menu>
   );
 
