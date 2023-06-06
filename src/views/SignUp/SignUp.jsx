@@ -21,9 +21,9 @@ function SignUp() {
   const [password, setPassword] = React.useState("");
   const [email, setEmail] = React.useState("");
   const navigate = useNavigate();
-  const [error, setError] = React.useState("");
-  const [variant, setVariant] =React.useState("");
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  // const [error, setError] = React.useState("");
+  // const [variant, setVariant] =React.useState("");
+  // const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 
   const validate = (values) => {
     const errors = required(['firstName', 'lastName', 'email', 'password'], values);
