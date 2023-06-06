@@ -11,7 +11,7 @@ import RFTextField from '../../components/form/RFTextField';
 import FormButton from '../../components/form/FormButton';
 import FormFeedback from '../../components/form/FormFeedback';
 import withRoot from '../../styles/withRoot';
-import { TextField} from '@mui/material'
+import { TextField } from '@mui/material'
 import { app } from "../../config/firebaseConnection";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
@@ -22,6 +22,9 @@ function SignUp() {
   const [password, setPassword] = React.useState("");
   const [email, setEmail] = React.useState("");
   const navigate = useNavigate();
+  const isPasswordValid = password.length > 0 && /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}/.test(password);
+  const isSubmitDisabled = !firstName || !lastName || !email || !isPasswordValid;
+
   // const [error, setError] = React.useState("");
   // const [variant, setVariant] =React.useState("");
   // const [snackbarOpen, setSnackbarOpen] = React.useState(false);
@@ -39,37 +42,28 @@ function SignUp() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!firstName) return;
-    if (!lastName) return;
-    if (!email) return;
-    if (!password) return;
-    const coleccionRef = app.firestore().collection("usuarios");
-    // Realizar la consulta para verificar si el correo ya existe
-    const querySnapshot = await coleccionRef.where("email", "==", email).get();
+    if (isSubmitDisabled) return;
+
+    const coleccionRef = app.firestore().collection('usuarios');
+    const querySnapshot = await coleccionRef.where('email', '==', email).get();
+
     if (!querySnapshot.empty) {
-      // El correo ya existe, puedes manejar el caso aquí
-      console.log("El correo ya está registrado");
-      Swal.fire({
-        position: 'center',
-        icon: 'info',
-        title: 'Correo existente, preba con otro',
-        showConfirmButton: false,
-        timer: 3500
-      })
-      
+      console.log('El correo ya está registrado');
+      alert('Correo existente, prueba con otro');
       return;
     }
-    // El correo no existe, agregarlo a la colección de usuarios
+
     await coleccionRef.doc().set({
       firstName: firstName,
       lastName: lastName,
       email: email,
       password: password,
-      tipo_Usuario: "consultador",
+      tipo_Usuario: 'consultador',
     });
-    navigate("/inicio");
+
+    navigate('/inicio');
   };
-  
+
 
   return (
     <React.Fragment>
@@ -100,7 +94,7 @@ function SignUp() {
                     value={firstName || ""}
                     onChange={(e) => {
                       const value = e.target.value;
-                      const regex = /^[a-zA-Z\s]*$/; 
+                      const regex = /^[a-zA-Z\s]*$/;
                       if (regex.test(value)) {
                         setFirstName(value);
                       }
@@ -115,22 +109,22 @@ function SignUp() {
                       firstName.length === 0
                         ? "El nombre no pude estar vacio"
                         : firstName.length < 3
-                        ? "El nombre no puede tener tener menos de 3 caracteres"
-                        : firstName.length > 30
-                        ? "El nombre no puede tener más de 30 caracteres"
-                        : ""
+                          ? "El nombre no puede tener tener menos de 3 caracteres"
+                          : firstName.length > 30
+                            ? "El nombre no puede tener más de 30 caracteres"
+                            : ""
                     }
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                <TextField
+                  <TextField
                     fullWidth
                     label="Last name"
                     name="LastName"
                     value={lastName || ""}
                     onChange={(e) => {
                       const value = e.target.value;
-                      const regex = /^[a-zA-Z\s]*$/; 
+                      const regex = /^[a-zA-Z\s]*$/;
                       if (regex.test(value)) {
                         setLastName(value);
                       }
@@ -145,10 +139,10 @@ function SignUp() {
                       lastName.length === 0
                         ? "El apellido no pude estar vacio"
                         : lastName.length < 3
-                        ? "El apellido no puede tener tener menos de 3 caracteres"
-                        : lastName.length > 30
-                        ? "El apellido no puede tener más de 30 caracteres"
-                        : ""
+                          ? "El apellido no puede tener tener menos de 3 caracteres"
+                          : lastName.length > 30
+                            ? "El apellido no puede tener más de 30 caracteres"
+                            : ""
                     }
                   />
                 </Grid>
@@ -173,32 +167,24 @@ function SignUp() {
                   email.length === 0
                     ? "El correo electrónico no puede estar vacío"
                     : !/\S+@\S+\.\S+/.test(email)
-                    ? "Ingrese un correo electrónico válido"
-                    : ""
+                      ? "Ingrese un correo electrónico válido"
+                      : ""
                 }
               />
               <br /><br />
-
               <TextField
                 fullWidth
                 label="Contraseña"
                 name="password"
                 type="password"
-                value={password || ""}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setPassword(value);
-                }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
-                error={
-                  (password.length > 0 && !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}/.test(password)) || password.length === 0
-                }
+                error={!isPasswordValid}
                 helperText={
-                  password.length === 0
-                    ? <span style={{ color: 'red' }}>La contraseña no puede estar vacía</span>
-                    : password.length > 0 && !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}/.test(password)
-                    ? "La contraseña debe tener al menos 5 caracteres, incluyendo al menos 1 letra minúscula, 1 letra mayúscula, 1 número y 1 carácter especial."
-                    : ""
+                  !isPasswordValid
+                    ? 'La contraseña debe tener al menos 5 caracteres, incluyendo al menos 1 letra minúscula, 1 letra mayúscula, 1 número y 1 carácter especial.'
+                    : ''
                 }
               />
 
