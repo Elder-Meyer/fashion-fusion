@@ -25,6 +25,7 @@ import { getProducts } from '../utils/fnTienda'
 import { useEffect, useState } from 'react'
 import Admin from "../views/users/admin/VerticalTabs";
 import { AdminPanel } from "../views/users/admin/AdminPanel";
+import Nosotros from "../views/AboutUs/Nosotros";
 
 function Router(props){
     const [productos, setProductos] = useState(null);
@@ -48,6 +49,7 @@ function Router(props){
                     <Route path='/' element={<Navigate to='/inicio'/>} />
                     <Route path='/inicio'           element={<Home/>} />
                     <Route path='/sign-in'          element={<SignIn/>} />
+                    <Route path='/about-us'         element={<Nosotros/>} />
                     <Route path='/sign-up'          element={<SignUp/>} />
                     <Route path='/terms'            element={<Terms/>} />
                     <Route path='/privacy'          element={<Privacy/>} />

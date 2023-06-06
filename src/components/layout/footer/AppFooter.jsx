@@ -91,6 +91,9 @@ export default function AppFooter() {
               <Box component="li" sx={{ py: 0.5 }}>
                 <Link component={LinkRoute} to="/privacy">Privacy</Link>
               </Box>
+              <Box component="li" sx={{ py: 0.5 }}>
+                <Link component={LinkRoute} to="/about-us">Sobre Nosotros</Link>
+              </Box>
             </Box>
           </Grid>
           <Grid item xs={6} sm={8} md={4}>
