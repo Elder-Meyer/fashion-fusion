@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
@@ -11,23 +11,41 @@ import RFTextField from '../../components/form/RFTextField';
 import FormButton from '../../components/form/FormButton';
 import FormFeedback from '../../components/form/FormFeedback';
 import withRoot from '../../styles/withRoot';
-import { TextField } from '@mui/material'
+import { TextField, IconButton, InputAdornment } from '@mui/material';
 import { app } from "../../config/firebaseConnection";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+
 function SignUp() {
-  const [sent, setSent] = React.useState(false);
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [email, setEmail] = React.useState("");
+  const [sent, setSent] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const isPasswordValid = password.length > 0 && /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}/.test(password);
   const isSubmitDisabled = !firstName || !lastName || !email || !isPasswordValid;
 
-  // const [error, setError] = React.useState("");
-  // const [variant, setVariant] =React.useState("");
-  // const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const key = "abcdefghijklmnñopqrstuvwxyz0123456789@$!%*?&";
+
+  const encrypt = (text) => {
+    const textLength = text.length;
+    let encrypted = "";
+    for (let i = 0; i < textLength; i++) {
+      const char = text[i].toLowerCase();
+      const index = key.indexOf(char);
+      if (index !== -1) {
+        const shift = textLength - i;
+        const newIndex = (index + shift) % key.length;
+        encrypted += key[newIndex];
+      } else {
+        encrypted += char;
+      }
+    }
+    return encrypted;
+  };
 
   const validate = (values) => {
     const errors = required(['firstName', 'lastName', 'email', 'password'], values);
@@ -40,6 +58,7 @@ function SignUp() {
     }
     return errors;
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitDisabled) return;
@@ -57,13 +76,16 @@ function SignUp() {
       firstName: firstName,
       lastName: lastName,
       email: email,
-      password: password,
+      password: encrypt(password),
       tipo_Usuario: 'consultador',
     });
 
     navigate('/inicio');
   };
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <React.Fragment>
@@ -107,9 +129,9 @@ function SignUp() {
                     }
                     helperText={
                       firstName.length === 0
-                        ? "El nombre no pude estar vacio"
+                        ? "El nombre no puede estar vacío"
                         : firstName.length < 3
-                          ? "El nombre no puede tener tener menos de 3 caracteres"
+                          ? "El nombre no puede tener menos de 3 caracteres"
                           : firstName.length > 30
                             ? "El nombre no puede tener más de 30 caracteres"
                             : ""
@@ -137,9 +159,9 @@ function SignUp() {
                     }
                     helperText={
                       lastName.length === 0
-                        ? "El apellido no pude estar vacio"
+                        ? "El apellido no puede estar vacío"
                         : lastName.length < 3
-                          ? "El apellido no puede tener tener menos de 3 caracteres"
+                          ? "El apellido no puede tener menos de 3 caracteres"
                           : lastName.length > 30
                             ? "El apellido no puede tener más de 30 caracteres"
                             : ""
@@ -176,7 +198,7 @@ function SignUp() {
                 fullWidth
                 label="Contraseña"
                 name="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -186,8 +208,16 @@ function SignUp() {
                     ? 'La contraseña debe tener al menos 5 caracteres, incluyendo al menos 1 letra minúscula, 1 letra mayúscula, 1 número y 1 carácter especial.'
                     : ''
                 }
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={toggleShowPassword}>
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
-
 
               <FormSpy subscription={{ submitError: true }}>
                 {({ submitError }) =>
@@ -204,6 +234,7 @@ function SignUp() {
                 fullWidth
                 type="submit"
                 onClick={handleSubmit}
+                disabled={isSubmitDisabled}
               >
                 Registrar
               </FormButton>
