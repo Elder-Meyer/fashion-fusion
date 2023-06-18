@@ -16,8 +16,11 @@ import { app } from "../../config/firebaseConnection";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-
+import { useAuth } from "../../context/AuthContext";
+import { db } from "../../config/firebase";
+import { doc,getDoc,setDoc} from "firebase/firestore";
 function SignUp() {
+  const { signup } = useAuth();
   const [sent, setSent] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -63,25 +66,33 @@ function SignUp() {
     e.preventDefault();
     if (isSubmitDisabled) return;
 
-    const coleccionRef = app.firestore().collection('usuarios');
-    const querySnapshot = await coleccionRef.where('email', '==', email).get();
+    try {
+      const info = await signup(email, password);
+      console.log("Info:", info); // Imprime información en la consola
 
-    if (!querySnapshot.empty) {
-      console.log('El correo ya está registrado');
-      alert('Correo existente, prueba con otro');
-      return;
+      const referencia = doc(db, "usuarios", info.user.uid); // Definir la referencia correcta
+      const querySnapshot = await getDoc(referencia); // Obtener el documento existente (opcional)
+
+      if (querySnapshot.exists()) {
+        console.log('El correo ya está registrado');
+        alert('Correo existente, prueba con otro');
+        return;
+      }
+
+      await setDoc(referencia, {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: encrypt(password),
+        tipo_Usuario: 'consultador',
+      });
+
+      navigate('/inicio');
+    } catch (error) {
+      console.log("Error:", error); // Imprime información en la consola si hay algún error
     }
-
-    await coleccionRef.doc().set({
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      password: encrypt(password),
-      tipo_Usuario: 'consultador',
-    });
-
-    navigate('/inicio');
   };
+  
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);

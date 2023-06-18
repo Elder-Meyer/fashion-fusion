@@ -9,9 +9,22 @@ import { HelpOutlineOutlined } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { saveSettingsApp, updateSettingsApp } from '../../../../utils/fnSettingsApp';
 import Swal from 'sweetalert2';
-
+import { useAuth } from "../../../../context/AuthContext";
 export const Personalizacion = () => {
-  
+  const { logout, user } = useAuth();
+  const handleLogout = async () => {
+    try {
+      setOpen(true);
+      await logout();
+      navigate("/");
+      setOpen(false);
+    } catch (error) {
+      setOpen(true);
+      console.log(error.message);
+      setOpen(false);
+    }
+  };
+  console.log("vista colaborador: id del usuario =>", user.uid);
   const [primaryColor, setPrimaryColor]           = useState("#2f3b84");
   const [primaryColorLight, setPrimaryColorLight] = useState("#e5e6ef");
   const [primaryColorDark, setPrimaryColorDark]   = useState("#0c134f");

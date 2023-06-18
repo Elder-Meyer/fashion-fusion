@@ -1,10 +1,10 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { Box }                  from '@mui/material'
+import { Box } from '@mui/material'
 
 import AppFooter from '../components/layout/footer/AppFooter';
 import AppAppBar from '../components/layout/navbar/AppAppBar';
 import Home from "../views/Home/Home";
-import Tienda  from '../views/Shop/Tienda'
+import Tienda from '../views/Shop/Tienda'
 import SignIn from "../views/SignIn/SignIn";
 import SignUp from "../views/SignUp/SignUp";
 import Terms from "../views/Terms/Terms";
@@ -26,11 +26,12 @@ import { useEffect, useState } from 'react'
 import Admin from "../views/users/admin/VerticalTabs";
 import { AdminPanel } from "../views/users/admin/AdminPanel";
 import Nosotros from "../views/AboutUs/Nosotros";
-
-function Router(props){
+import { AuthProvider } from '../context/AuthContext'
+import { ProtecteRoutAdmi } from '../components/customs/protectedRoutAdmin'
+function Router(props) {
     const [productos, setProductos] = useState(null);
 
-    const getProductsData = async() =>{
+    const getProductsData = async () => {
         const p = await getProducts();
         setProductos(p.docs);
         // console.log(p.docs)
@@ -40,46 +41,48 @@ function Router(props){
         getProductsData();
     }, [])
 
-    return(
+    return (
         <BrowserRouter>
-            <AppAppBar />   
+            <AuthProvider>
+                <AppAppBar />
 
-            <ScrollToTop>
-                <Routes>
-                    <Route path='/' element={<Navigate to='/inicio'/>} />
-                    <Route path='/inicio'           element={<Home/>} />
-                    <Route path='/sign-in'          element={<SignIn/>} />
-                    <Route path='/about-us'         element={<Nosotros/>} />
-                    <Route path='/sign-up'          element={<SignUp/>} />
-                    <Route path='/terms'            element={<Terms/>} />
-                    <Route path='/privacy'          element={<Privacy/>} />
-                    <Route path='/forgot-password'  element={<ForgotPassword/>} />
-                    <Route path="/user/admin"       element={<AdminPanel/>} />
+                <ScrollToTop>
+                    <Routes>
+                        <Route path='/' element={<Navigate to='/inicio' />} />
+                        <Route path='/inicio' element={<Home />} />
+                        <Route path='/sign-in' element={<SignIn />} />
+                        <Route path='/about-us' element={<Nosotros />} />
+                        <Route path='/sign-up' element={<SignUp />} />
+                        <Route path='/terms' element={<Terms />} />
+                        <Route path='/privacy' element={<Privacy />} />
+                        <Route path='/forgot-password' element={<ForgotPassword />} />
+                        <Route path="/user/admin" element={<ProtecteRoutAdmi>  <AdminPanel /> </ProtecteRoutAdmi> } />
 
-                    {/* SubRutas -- tienda */}
-                    <Route path="/tienda/" >
-                        <Route index                    element={<Tienda/>} />
-                        <Route path="hombre"            element={<Man/>} />
-                        <Route path="mujer"             element={<Women/>} />
-                        <Route path="niño"              element={<Child/>} />
-                        <Route path="niña"              element={<LittleGirl/>} />
-                        <Route path="*"                 element={"error"} />
-                    </Route>
+                        {/* SubRutas -- tienda */}
+                        <Route path="/tienda/" >
+                            <Route index element={<Tienda />} />
+                            <Route path="hombre" element={<Man />} />
+                            <Route path="mujer" element={<Women />} />
+                            <Route path="niño" element={<Child />} />
+                            <Route path="niña" element={<LittleGirl />} />
+                            <Route path="*" element={"error"} />
+                        </Route>
 
-                    <Route path='tienda/:id'    element={<DetalleProduct productos={productos}/> } />
+                        <Route path='tienda/:id' element={<DetalleProduct productos={productos} />} />
 
-                    <Route path='*'  element={"error"} />
-                </Routes>
+                        <Route path='*' element={"error"} />
+                    </Routes>
 
 
-                <BtnScrollTop {...props}>
-                    <Fab size="small" aria-label="scroll back to top">
-                        <KeyboardArrowUpIcon />
-                    </Fab>
-                </BtnScrollTop>
-            </ScrollToTop>
-            
-            <AppFooter />
+                    <BtnScrollTop {...props}>
+                        <Fab size="small" aria-label="scroll back to top">
+                            <KeyboardArrowUpIcon />
+                        </Fab>
+                    </BtnScrollTop>
+                </ScrollToTop>
+
+                <AppFooter />
+            </AuthProvider>
         </BrowserRouter>
     )
 }

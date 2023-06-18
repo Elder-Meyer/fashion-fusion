@@ -1,17 +1,13 @@
-import React from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.jsx'
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
-import { CssBaseline } from '@mui/material';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import { AuthProvider } from './context/AuthContext';
 
-const container = document.getElementById('root')
-const root = createRoot(container);
-root.render(
-  <>
-    <CssBaseline />
-    <App />
-  </>
-)
+ReactDOM.render(
+  <React.StrictMode>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
