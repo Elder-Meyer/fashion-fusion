@@ -31,6 +31,24 @@ function SignIn() {
 
     return errors;
   };
+  const key = "abcdefghijklmnñopqrstuvwxyz0123456789@$!%*?&";
+
+  const encrypt = (text) => {
+    const textLength = text.length;
+    let encrypted = "";
+    for (let i = 0; i < textLength; i++) {
+      const char = text[i].toLowerCase();
+      const index = key.indexOf(char);
+      if (index !== -1) {
+        const shift = textLength - i;
+        const newIndex = (index + shift) % key.length;
+        encrypted += key[newIndex];
+      } else {
+        encrypted += char;
+      }
+    }
+    return encrypted;
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) return;
@@ -44,7 +62,7 @@ function SignIn() {
       const userData = userDoc.data();
       const storedPassword = userData.password;
   
-      if (password !== storedPassword) {
+      if (encrypt(password) !== storedPassword) {
         // Contraseña incorrecta
         Swal.fire({
           position: 'center',
