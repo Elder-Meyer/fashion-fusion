@@ -17,9 +17,9 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemText, Slide, useScrollTrigger } from '@mui/material';
 import { Link } from 'react-router-dom';
-
+import { useAuth } from "../../../context/AuthContext";
 const drawerWidth = 240;
-const navItems = [{texto: 'Inicio', path: '/inicio'}, {texto: 'Nosotros', path: '/about-us'}, {texto: 'Tienda', path: '/tienda'} ];
+const navItems = [{ texto: 'Inicio', path: '/inicio' }, { texto: 'Nosotros', path: '/about-us' }, { texto: 'Tienda', path: '/tienda' }];
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -62,49 +62,64 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function HideOnScroll(props) {
-    const { children, window } = props;
-    // Note that you normally won't need to set the window ref as useScrollTrigger
-    // will default to window.
-    // This is only being set here because the demo is in an iframe.
-    const trigger = useScrollTrigger({
-      target: window ? window() : undefined,
-    });
-  
-    return (
-      <Slide appear={false} direction="down" in={!trigger}>
-        {children}
-      </Slide>
-    );
-  }
+  const { children, window } = props;
+  // Note that you normally won't need to set the window ref as useScrollTrigger
+  // will default to window.
+  // This is only being set here because the demo is in an iframe.
+  const trigger = useScrollTrigger({
+    target: window ? window() : undefined,
+  });
+
+  return (
+    <Slide appear={false} direction="down" in={!trigger}>
+      {children}
+    </Slide>
+  );
+}
 
 export default function AppAppBar(props) {
-    const { window } = props;
-    const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { window } = props;
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
-    const handleDrawerToggle = () => {
-        setMobileOpen((prevState) => !prevState);
+  const handleDrawerToggle = () => {
+    setMobileOpen((prevState) => !prevState);
+  }
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+      <Typography variant="h6" sx={{ my: 2 }} color="secondary">
+        Fashion fusion
+      </Typography>
+      <Divider />
+      <List>
+        {navItems.map((item) => (
+          <ListItem key={item.path} disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }} component={Link} to={item.path}>
+              <ListItemText primary={item.texto} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
+  const container = window !== undefined ? () => window().document.body : undefined;
+  const { logout, user } = useAuth();
+  const [open, setOpen] = React.useState(false);
+
+  const handleLogout = async () => {
+    try {
+      setOpen(true);
+      await logout();
+      navigate('/');
+      setOpen(false);
+    } catch (error) {
+      setOpen(true);
+      console.log(error.message);
+      setOpen(false);
     }
-
-    const drawer = (
-        <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-          <Typography variant="h6" sx={{ my: 2 }} color="secondary">
-            Fashion fusion
-          </Typography>
-          <Divider />
-          <List>
-            {navItems.map((item) => (
-              <ListItem key={item.path} disablePadding>
-                <ListItemButton sx={{ textAlign: 'center' }} component={Link} to={item.path}>
-                  <ListItemText primary={item.texto} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      );
-
-        const container = window !== undefined ? () => window().document.body : undefined;
-
+  };
+  
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -146,7 +161,7 @@ export default function AppAppBar(props) {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose} component={Link} to="/user/admin">Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose} component={Link} to="/user/admin">My account</MenuItem>
+      <MenuItem onClick={handleLogout}>Cerrar sesion</MenuItem>
     </Menu>
   );
 
@@ -204,91 +219,91 @@ export default function AppAppBar(props) {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-    <HideOnScroll {...props}>
-      <AppBar>
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { xs: 'block', sm: 'block', md: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            color="secondary"
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            Fashion fusion
-          </Typography>
-
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', sm: 'none', md: 'block' } }}>
-            {navItems.map((item) => (
-              <Button key={item.path} sx={{ color: '#fff' }} component={Link} to={item.path}>
-                {item.texto}
-              </Button>
-            ))}
-          </Box>
-          <Box sx={{ flexGrow: 1 }} />
-
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={0} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
+      <HideOnScroll {...props}>
+        <AppBar>
+          <Toolbar>
             <IconButton
               size="large"
-              aria-label="show 17 new notifications"
+              edge="start"
               color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { xs: 'block', sm: 'block', md: 'none' } }}
             >
-              <Badge badgeContent={0} color="error">
-                <NotificationsIcon />
-              </Badge>
+              <MenuIcon />
             </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
+            <Typography
+              color="secondary"
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ display: { xs: 'none', sm: 'block' } }}
             >
-              <AccountCircle />
-            </IconButton>
-          </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
-    </HideOnScroll>
+              Fashion fusion
+            </Typography>
+
+            <Box sx={{ flexGrow: 1 }} />
+            <Box sx={{ display: { xs: 'none', sm: 'none', md: 'block' } }}>
+              {navItems.map((item) => (
+                <Button key={item.path} sx={{ color: '#fff' }} component={Link} to={item.path}>
+                  {item.texto}
+                </Button>
+              ))}
+            </Box>
+            <Box sx={{ flexGrow: 1 }} />
+
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </Search>
+
+            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+              <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                <Badge badgeContent={0} color="error">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                color="inherit"
+              >
+                <Badge badgeContent={0} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </Box>
+            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                size="large"
+                aria-label="show more"
+                aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+      </HideOnScroll>
       <Box component="nav">
         <Drawer
           container={container}
@@ -308,7 +323,7 @@ export default function AppAppBar(props) {
       </Box>
       {renderMobileMenu}
       {renderMenu}
-      <Toolbar/>
+      <Toolbar />
     </Box>
   );
 }
