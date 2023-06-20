@@ -14,8 +14,10 @@ import { TextField} from '@mui/material'
 import { app } from "../../config/firebaseConnection";
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-
+import { useAuth } from "../../context/AuthContext";
 function SignIn() {
+  const { login } = useAuth();
+  
   const [sent, setSent] = React.useState(false);
   const [password, setPassword] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -34,6 +36,7 @@ function SignIn() {
   const key = "abcdefghijklmnñopqrstuvwxyz0123456789@$!%*?&";
 
   const encrypt = (text) => {
+    
     const textLength = text.length;
     let encrypted = "";
     for (let i = 0; i < textLength; i++) {
@@ -50,6 +53,7 @@ function SignIn() {
     return encrypted;
   };
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
     if (!email) return;
     if (!password) return;
@@ -61,7 +65,7 @@ function SignIn() {
       const userDoc = querySnapshot.docs[0];
       const userData = userDoc.data();
       const storedPassword = userData.password;
-  
+      await login(email, password);
       if (encrypt(password) !== storedPassword) {
         // Contraseña incorrecta
         Swal.fire({
