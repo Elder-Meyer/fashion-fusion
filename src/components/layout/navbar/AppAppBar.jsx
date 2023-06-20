@@ -20,7 +20,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from "../../../context/AuthContext";
 const drawerWidth = 240;
 const navItems = [{ texto: 'Inicio', path: '/inicio' }, { texto: 'Nosotros', path: '/about-us' }, { texto: 'Tienda', path: '/tienda' }];
-
+import {useNavigate } from 'react-router-dom';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -119,7 +119,13 @@ export default function AppAppBar(props) {
       setOpen(false);
     }
   };
-  
+  const navigate = useNavigate();
+  const handleLogin = () => {
+    navigate('/sign-in');
+  };
+  const handleMenuClick = user ? handleLogout : handleLogin;
+
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -161,7 +167,9 @@ export default function AppAppBar(props) {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose} component={Link} to="/user/admin">Profile</MenuItem>
-      <MenuItem onClick={handleLogout}>Cerrar sesion</MenuItem>
+      <MenuItem onClick={handleMenuClick}>
+        {user ? 'Cerrar sesión' : 'Iniciar sesión'}
+      </MenuItem>
     </Menu>
   );
 
