@@ -18,12 +18,18 @@ export const saveSettingsApp =  (primaryColorLight, primaryColor, primaryColorDa
 //ACTUALIZAR
 export const updateSettingsApp = async(id, primaryColorLight, primaryColor, primaryColorDark, secondaryColorLight, secondaryColor, secondaryColorDark) =>{
     await updateDoc(doc(db, 'settingsApp', id), {
-        primaryColorLight,
-        primaryColor,
-        primaryColorDark,
-
-        secondaryColorLight,
-        secondaryColor,
-        secondaryColorDark,
+        "light":{
+            "primary":{
+                "dark": primaryColorDark,
+                "light": primaryColorLight,
+                "main": primaryColor
+            },
+            "secondary":{
+                "dark": secondaryColorDark,
+                "light": secondaryColorLight,
+                "main": secondaryColor
+            }
+        },
+        
     });
 }
